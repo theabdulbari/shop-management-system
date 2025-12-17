@@ -14,6 +14,63 @@ class SaleIndex extends Component
     use WithPagination;
 
     public $deleteId;
+    public $expandedSaleId = null;
+    public $search = '';
+    public $fromDate;
+    public $toDate;
+    public $paymentStatus = ''; // paid | due | partial
+    public $perPage = 10;
+
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'fromDate' => ['except' => ''],
+        'toDate' => ['except' => ''],
+        'paymentStatus' => ['except' => ''],
+        'perPage' => ['except' => 10],
+    ];
+
+    public function updating($field)
+    {
+        if (in_array($field, [
+            'search', 'fromDate', 'toDate', 'paymentStatus', 'perPage'
+        ])) {
+            $this->resetPage();
+        }
+    }
+
+    public function resetFilters()
+    {
+        $this->reset([
+            'search',
+            'fromDate',
+            'toDate',
+            'paymentStatus',
+        ]);
+
+        $this->perPage = 10;
+        $this->resetPage();
+    }
+
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFromDate()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingToDate()
+    {
+        $this->resetPage();
+    }
+
+    public function toggleItems($saleId)
+    {
+        $this->expandedSaleId = $this->expandedSaleId === $saleId ? null : $saleId;
+    }
 
     public function confirmDelete($id)
     {
@@ -35,8 +92,49 @@ class SaleIndex extends Component
 
     public function render()
     {
+        $query = Sale::with(['customer','invoice','items.product'])
+
+        // 🔍 Universal search
+        ->when($this->search, function ($q) {
+            $q->where(function ($query) {
+                $query
+                    ->where('paid', 'like', "%{$this->search}%")
+                    ->orWhere('due', 'like', "%{$this->search}%")
+                    ->orWhereDate('sale_date', $this->search)
+                    ->orWhereHas('customer', fn ($c) =>
+                        $c->where('name', 'like', "%{$this->search}%")
+                    )
+                    ->orWhereHas('invoice', fn ($i) =>
+                        $i->where('invoice_number', 'like', "%{$this->search}%")
+                    );
+            });
+        })
+
+        // 📅 Date range
+        ->when($this->fromDate, fn ($q) =>
+            $q->whereDate('sale_date', '>=', $this->fromDate)
+        )
+        ->when($this->toDate, fn ($q) =>
+            $q->whereDate('sale_date', '<=', $this->toDate)
+        )
+
+        // 💰 Payment status filter
+        ->when($this->paymentStatus, function ($q) {
+            match ($this->paymentStatus) {
+                'paid' => $q->where('due', 0),
+                'due' => $q->where('paid', 0),
+                'partial' => $q->where('paid', '>', 0)->where('due', '>', 0),
+            };
+        })
+
+        ->latest();
+
+    $sales = $this->perPage === 'all'
+        ? $query->get()
+        : $query->paginate($this->perPage);
+        
         return view('livewire.sales.sale-index', [
-            'sales' => Sale::with('customer','invoice')->latest()->paginate(10)
+            'sales' => $sales
         ]);
     }
 }

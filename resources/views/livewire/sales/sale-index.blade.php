@@ -8,9 +8,65 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+        <div class="row mb-3 align-items-end">
+            {{-- Search --}}
+            <div class="col-md-3">
+                <label class="form-label">Search</label>
+                <input type="text"
+                    class="form-control"
+                    placeholder="Customer, Invoice, Paid, Due..."
+                    wire:model.lazy.debounce.500ms="search">
+            </div>
+
+            {{-- Payment Status --}}
+            <div class="col-md-2">
+                <label class="form-label">Payment Status</label>
+                <select class="form-select" wire:model.lazy="paymentStatus">
+                    <option value="">All</option>
+                    <option value="paid">Paid</option>
+                    <option value="due">Due</option>
+                    <option value="partial">Partial</option>
+                </select>
+            </div>
+
+            {{-- From Date --}}
+            <div class="col-md-2">
+                <label class="form-label">From</label>
+                <input type="date" class="form-control" wire:model.lazy="fromDate">
+            </div>
+
+            {{-- To Date --}}
+            <div class="col-md-2">
+                <label class="form-label">To</label>
+                <input type="date" class="form-control" wire:model.lazy="toDate">
+            </div>
+
+            {{-- Per Page --}}
+            <div class="col-md-2">
+                <label class="form-label">Per Page</label>
+                <select class="form-select" wire:model="perPage">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="all">All</option>
+                </select>
+            </div>
+
+            {{-- Reset --}}
+            <div class="col-md-1">
+                <button class="btn btn-secondary w-100"
+                        wire:click="resetFilters">
+                    Reset
+                </button>
+            </div>
+        </div>
+
+
+
     <table class="table table-bordered">
         <thead>
         <tr>
+            <th width="40"></th>
             <th>#Invoice</th>
             <th>Customer</th>
             <th>Sale Date</th>
@@ -24,6 +80,13 @@
         <tbody>
         @foreach($sales as $s)
             <tr>
+                <td class="text-center">
+                    <button
+                        wire:click="toggleItems({{ $s->id }})"
+                        class="btn btn-sm btn-outline-secondary">
+                        {{ $expandedSaleId === $s->id ? '−' : '+' }}
+                    </button>
+                </td>
                 <td>{{ $s->invoice->invoice_number }}</td>
                 <td>{{ $s->customer?->name ?? 'Walk-in' }}</td>
                 <td>{{ $s->sale_date }}</td>
@@ -40,11 +103,41 @@
                     <a class="btn btn-warning btn-sm" href="{{ route('sales.edit', $s->id) }}">Edit</a>
                 </td>
             </tr>
+
+            {{-- Sale Items Row (Hidden / Shown) --}}
+            @if($expandedSaleId === $s->id)
+                <tr class="bg-light">
+                    <td colspan="8">
+                        <table class="table table-sm table-bordered mb-0">
+                            <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($s->items as $item)
+                                <tr>
+                                    <td>{{ $item->product->name }}</td>
+                                    <td>{{ $item->qty }}</td>
+                                    <td>{{ $item->unit_price }}</td>
+                                    <td>{{ $item->qty * $item->unit_price }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            @endif
+
         @endforeach
         </tbody>
     </table>
-
-    {{ $sales->links() }}
+    @if($perPage !== 'all')
+        {{ $sales->links() }}
+    @endif
 
     <div class="modal fade" id="deleteModal" tabindex="-1">
         <div class="modal-dialog">
