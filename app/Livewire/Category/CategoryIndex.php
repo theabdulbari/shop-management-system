@@ -11,7 +11,7 @@ use App\Models\Category;
 class CategoryIndex extends Component
 {
     use WithPagination;
-
+    public $perPage = 25;
     public $deleteId;
 
     public function confirmDelete($id)
