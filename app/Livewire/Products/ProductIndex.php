@@ -12,6 +12,7 @@ use App\Models\Product;
 class ProductIndex extends Component
 {
     use WithPagination;
+    public $perPage = 25;
     public $search = '';
     // public $perPage = 10; 
     public $deleteId;
