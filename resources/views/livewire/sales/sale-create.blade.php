@@ -88,16 +88,16 @@
         <table  class="table table-bordered">
             <tr>
                 <td>
-                    <h4>Discount: {{ number_format(@$discount, 2) }}</h4>
+                    <h4>Discount: {{ money(@$discount) }}</h4>
                 </td>
                 <td>
-                    <h4>Grand Total: {{ number_format($grand_total, 2) }}</h4>
+                    <h4>Grand Total: {{ money($grand_total) }}</h4>
                 </td>
                 <td>
-                    <h4>Due: {{ number_format(@$due, 2) }}</h4>
+                    <h4>Due: {{ money(@$due) }}</h4>
                 </td>
                 <td>
-                    <h4>Paid: {{ number_format(@$paid, 2) }}</h4>
+                    <h4>Paid: {{ money(@$paid) }}</h4>
                 </td>
                 <td>
                     <h4>Status: {{ ucfirst($payment_status) }}</h4>

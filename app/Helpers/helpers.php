@@ -58,3 +58,11 @@ function formatWeight($value, $unit = 'gm')
 }
 
 }
+
+
+if (!function_exists('money')) {
+    function money($amount, $decimals = 2)
+    {
+        return number_format((float)$amount, $decimals);
+    }
+}

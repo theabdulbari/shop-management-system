@@ -17,6 +17,19 @@ class ProductIndex extends Component
     // public $perPage = 10; 
     public $deleteId;
 
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'perPage' => ['except' => 10],
+    ];
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingPerPage()
+    {
+        $this->resetPage();
+    }
     public function confirmDelete($id)
     {
         $this->deleteId = $id;
@@ -28,18 +41,17 @@ class ProductIndex extends Component
         session()->flash('success', 'Product deleted successfully!');
     }
 
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
-
-
     public function render()
     {
-        $products = Product::with('category')
-            ->where('name', 'like', '%' . $this->search . '%')
-            ->orderBy('id', 'desc')
-            ->paginate($this->perPage);
+        $query = Product::query()
+            ->when($this->search, function ($q) {
+                $q->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->latest();
+
+        $products = $this->perPage === 'all'
+            ? $query->get()
+            : $query->paginate($this->perPage);
 
         return view('livewire.products.product-index', compact('products'));
     }
