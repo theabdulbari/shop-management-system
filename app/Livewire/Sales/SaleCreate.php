@@ -156,10 +156,10 @@ public function loadProductPrice($index)
                 'customer_id' => $this->customer_id,
                 'user_id' => Auth::id(),
                 'sale_date' => $this->date,
-                'discount' => $this->discount,
+                'discount' => $this->discount ?? 0,
                 'shipping' => $this->shipping,
-                'paid' => $this->paid,
-                'due' => $this->due,
+                'paid' => $this->paid ?? 0,
+                'due' => $this->due ?? 0,
                 'grand_total' => $this->grand_total,
                 'total_amount' => $this->grand_total + $this->discount,
                 'payment_status' => $this->paid >= $this->grand_total ? 'paid' :

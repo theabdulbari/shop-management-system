@@ -92,9 +92,9 @@
                 <td>{{ $s->sale_date }}</td>
                 {{-- <td>{{ $s->user->name }}</td> --}}
                 
-                <td>{{ $s->grand_total }}</td>
-                <td>{{ $s->paid }}</td>
-                <td>{{ $s->due }}</td>
+                <td>{{ money($s->grand_total) }}</td>
+                <td>{{ money($s->paid) }}</td>
+                <td>{{ money($s->due) }}</td>
                 <td>
                     <button wire:click="confirmDelete({{ $s->id }})" class="btn btn-danger btn-sm"
                             data-bs-toggle="modal" data-bs-target="#deleteModal">
@@ -122,8 +122,8 @@
                                 <tr>
                                     <td>{{ $item->product->name }}</td>
                                     <td>{{ $item->qty }}</td>
-                                    <td>{{ $item->unit_price }}</td>
-                                    <td>{{ $item->qty * $item->unit_price }}</td>
+                                    <td>{{ money($item->unit_price) }}</td>
+                                    <td>{{ money($item->qty * $item->unit_price) }}</td>
                                 </tr>
                             @endforeach
                             </tbody>

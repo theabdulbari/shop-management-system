@@ -124,8 +124,8 @@ class SaleEdit extends Component
             $total += $this->products[$i]['subtotal'];
         }
 
-        $discount = (float) $this->discount;
-        $paid     = (float) $this->paid;
+        $discount = (float) $this->discount ?? 0;
+        $paid     = (float) $this->paid ?? 0;
 
         $this->grand_total = max(0, $total - $discount);
         $this->due = max(0, $this->grand_total - $paid);
@@ -160,12 +160,12 @@ class SaleEdit extends Component
             $this->sale->update([
                 'customer_id'    => $this->customer_id,
                 'sale_date'      => $this->date,
-                'discount'       => $this->discount,
+                'discount'       => $this->discount ?? 0,
                 'shipping'       => $this->shipping,
-                'paid'           => $this->paid,
-                'due'            => $this->due,
+                'paid'           => $this->paid ?? 0,
+                'due'            => $this->due ?? 0,
                 'grand_total'    => $this->grand_total,
-                'total_amount'   => $this->grand_total + $this->discount,
+                'total_amount'   => $this->grand_total + ($this->discount ?? 0),
                 'payment_status' => $this->payment_status,
                 'user_id'        => Auth::id(),
             ]);
