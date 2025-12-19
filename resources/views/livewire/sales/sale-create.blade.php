@@ -48,8 +48,8 @@
                                 @endforeach
                             </select>
                         </td>
-                        <td><input type="number" wire:model.lazy="products.{{ $index }}.qty" step="0.01" min="0" class="form-control"></td>
-                        <td><input type="number" wire:model.lazy="products.{{ $index }}.unit_price" step="0.01" min="0" class="form-control"></td>
+                        <td><input type="number" wire:model.lazy="products.{{ $index }}.qty" step="0.001" min="0" class="form-control"></td>
+                        <td><input type="number" wire:model.lazy="products.{{ $index }}.unit_price" step="0.001" min="0" class="form-control"></td>
                         <td>{{ $p['subtotal'] ?? 0 }}</td>
                         <td><button type="button" wire:click="removeProductRow({{ $index }})" class="btn btn-danger btn-sm">x</button></td>
                     </tr>
@@ -59,7 +59,7 @@
                 <tr>
                     <td>
                         <label>Discount:</label>
-                        <input type="number" wire:model.live="discount" value="0" class="form-control">
+                        <input type="number" wire:model.live="discount" step="0.001" min="0" value="0" class="form-control">
                     </td>
                     <td>
                         <!-- #region -->
@@ -69,7 +69,7 @@
                     <td>
                         <!-- #region -->
                         <label>Paid:</label>
-                        <input type="number" wire:model.live="paid"  value="0" class="form-control">
+                        <input type="number" wire:model.live="paid" step="0.001" min="0"  value="0" class="form-control">
                     </td>
                     <td>
                         <label>Payment Status:</label>
@@ -88,16 +88,16 @@
         <table  class="table table-bordered">
             <tr>
                 <td>
-                    <h4>Discount: {{ @$discount }}</h4>
+                    <h4>Discount: {{ number_format(@$discount, 2) }}</h4>
                 </td>
                 <td>
-                    <h4>Grand Total: {{ $grand_total }}</h4>
+                    <h4>Grand Total: {{ number_format($grand_total, 2) }}</h4>
                 </td>
                 <td>
-                    <h4>Due: {{ @$due }}</h4>
+                    <h4>Due: {{ number_format(@$due, 2) }}</h4>
                 </td>
                 <td>
-                    <h4>Paid: {{ @$paid }}</h4>
+                    <h4>Paid: {{ number_format(@$paid, 2) }}</h4>
                 </td>
                 <td>
                     <h4>Status: {{ ucfirst($payment_status) }}</h4>
