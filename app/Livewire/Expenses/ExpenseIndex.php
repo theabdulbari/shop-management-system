@@ -9,6 +9,7 @@ use App\Models\Expense;
 
 class ExpenseIndex extends Component
 {
+    public $perPage = 25;
     public function render()
     {
         $query = Expense::with('category','user')
