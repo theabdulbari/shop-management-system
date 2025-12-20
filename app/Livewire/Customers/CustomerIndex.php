@@ -11,7 +11,7 @@ use App\Models\Customer;
 class CustomerIndex extends Component
 {
     use WithPagination;
-
+    public $perPage = 25;
     public $search = '';
 
     protected $paginationTheme = 'bootstrap';

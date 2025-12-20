@@ -135,9 +135,11 @@
         @endforeach
         </tbody>
     </table>
-    @if($perPage !== 'all')
-        {{ $sales->links() }}
-    @endif
+    <div class="card-footer d-flex justify-content-center">
+        @if($perPage !== 'all')
+            {{ $sales->links('pagination::bootstrap-5') }}
+        @endif
+    </div>
 
     <div class="modal fade" id="deleteModal" tabindex="-1">
         <div class="modal-dialog">

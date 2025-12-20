@@ -40,7 +40,7 @@
                 @foreach($products as $index => $p)
                     <tr wire:key="product-{{ $index }}">
                         <td>
-                            <select wire:model="products.{{ $index }}.product_id" class="form-select">
+                            <select wire:model.lazy="products.{{ $index }}.product_id" class="form-select">
                                 <option value="">Select Product</option>
                                 @foreach($supplierProducts as $prod)
                                     <option value="{{ $prod->id }}">{{ $prod->name }}</option>
