@@ -51,6 +51,11 @@ use App\Livewire\Expenses\{
     ExpenseCategoryIndex
 };
 
+use App\Livewire\Loan\LoanIndex;
+use App\Livewire\Loan\LoanCreate;
+use App\Livewire\Loan\LoanEdit;
+use App\Livewire\Loan\LoanPayments;
+
 
 
 /*
@@ -150,6 +155,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports/sales', SalesReport::class)->name('reports.sales');
     Route::get('/reports/stock', StockReport::class)->name('reports.stock');
     Route::get('/reports/top-selling', TopSellingProducts::class)->name('reports.top-selling');
+
+    Route::get('/loans', LoanIndex::class)->name('loans.index');
+    Route::get('/loans/create', LoanCreate::class)->name('loans.create');
+    Route::get('/loans/{loan}/edit', LoanEdit::class)->name('loans.edit');
+    Route::get('/loans/{loan}/payments', LoanPayments::class)
+    ->name('loans.payments');
+
 });
 
 

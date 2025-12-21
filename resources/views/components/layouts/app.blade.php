@@ -37,6 +37,7 @@
                 {{-- <div class="fw-bold px-3 pt-3 text-secondary small">CUSTOMERS</div> --}}
                 <a href="{{ route('customers.index') }}" class="list-group-item list-group-item-action">👥 Customers</a>
                 <a href="{{ route('expenses.index') }}" class="list-group-item list-group-item-action">💵 Expense</a>
+                <a href="{{ route('loans.index') }}" class="list-group-item list-group-item-action">💰 Loans</a>
 
                 <div class="fw-bold px-3 pt-3 text-secondary small">INVENTORY</div>
                 <a href="{{ route('categories.index') }}" class="list-group-item list-group-item-action">📁 Categories</a>
