@@ -1,5 +1,18 @@
 <?php
 
+use App\Models\Setting;
+
+function setting($key = null, $default = null)
+{
+    $setting = cache()->rememberForever('app_setting', function () {
+        return Setting::first();
+    });
+
+    if (!$setting) return $default;
+
+    return $key ? ($setting->$key ?? $default) : $setting;
+}
+
 if (!function_exists('formatWeight')) {
     /**
      * Format weight in grams to kg + gm

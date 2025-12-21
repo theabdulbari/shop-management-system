@@ -56,6 +56,8 @@ use App\Livewire\Loan\LoanCreate;
 use App\Livewire\Loan\LoanEdit;
 use App\Livewire\Loan\LoanPayments;
 
+use App\Livewire\Settings\Settings;
+
 
 
 /*
@@ -159,8 +161,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/loans', LoanIndex::class)->name('loans.index');
     Route::get('/loans/create', LoanCreate::class)->name('loans.create');
     Route::get('/loans/{loan}/edit', LoanEdit::class)->name('loans.edit');
-    Route::get('/loans/{loan}/payments', LoanPayments::class)
-    ->name('loans.payments');
+    Route::get('/loans/{loan}/payments', LoanPayments::class)->name('loans.payments');
+
+    Route::get('/settings', Settings::class)->name('settings');
 
 });
 

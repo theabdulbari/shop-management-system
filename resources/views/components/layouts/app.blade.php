@@ -16,7 +16,12 @@
 <body>
     <!-- TOP NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-        <a class="navbar-brand" href="{{ route('dashboard') }}">ERP</a>
+        <a class="navbar-brand" href="{{ route('dashboard') }}">
+            <img style="width: 24px;" src="{{ $appSetting?->logo 
+                ? asset('storage/'.$appSetting->logo) 
+                : asset('images/erp_logo.png').'?v='.time() }}" alt="Logo" class="me-1">
+            {{ $appSetting->system_name ?? 'ERP' }} 
+        </a>
 
         <div class="ms-auto text-white">
             {{ Auth::user()->name }}
@@ -56,6 +61,9 @@
                 <div class="fw-bold px-3 pt-3 text-secondary small">SYSTEM</div>
                 <a href="{{ route('users.index') }}" class="list-group-item list-group-item-action">👥 Users</a>
                 {{-- <a href="{{ route('settings.index') }}" class="list-group-item list-group-item-action">⚙ Settings</a> --}}
+
+                <div class="fw-bold px-3 pt-3 text-secondary small">SETTINGS</div>
+                <a href="{{ route('settings') }}" class="list-group-item list-group-item-action">⚙️ System Settings</a>
             </div>
         </div>
 

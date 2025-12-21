@@ -224,13 +224,25 @@
 
 
 <script>
-    document.addEventListener('livewire:init', () => {
-        Livewire.on('close-payment-modal', () => {
-            const modal = bootstrap.Modal.getInstance(
-                document.getElementById('paymentModal');
-                document.getElementById('addPaymentModal');
-            );
-            modal.hide();
-        });
+document.addEventListener('livewire:init', () => {
+    Livewire.on('close-payment-modal', () => {
+
+        const paymentModalEl = document.getElementById('paymentModal');
+        const addPaymentModalEl = document.getElementById('addPaymentModal');
+
+        if (paymentModalEl) {
+            const paymentModal = bootstrap.Modal.getInstance(paymentModalEl)
+                || new bootstrap.Modal(paymentModalEl);
+            paymentModal.hide();
+        }
+
+        if (addPaymentModalEl) {
+            const addPaymentModal = bootstrap.Modal.getInstance(addPaymentModalEl)
+                || new bootstrap.Modal(addPaymentModalEl);
+            addPaymentModal.hide();
+        }
+
     });
+});
+
 </script>
