@@ -9,6 +9,25 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Search supplier by name..."
+                wire:model.lazy="search">
+        </div>
+
+        <div class="col-md-2">
+            <select class="form-select" wire:model="perPage">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="all">All</option>
+            </select>
+        </div>
+    </div>
+
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -48,7 +67,11 @@
         </tbody>
     </table>
 
-    {{ $suppliers->links() }}
+    <div class="card-footer d-flex justify-content-center">
+        @if($perPage !== 'all')
+            {{ $suppliers->links('pagination::bootstrap-5') }}
+        @endif
+    </div>
 
     <!-- Delete modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1">

@@ -10,5 +10,6 @@ class Setting extends Model
         'system_name',
         'logo',
         'db_backup_path',
+        'currency_symbol',
     ];
 }

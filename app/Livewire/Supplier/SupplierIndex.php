@@ -13,6 +13,8 @@ class SupplierIndex extends Component
 {
     use WithPagination;
 
+    public $perPage = 25;
+    public $search = '';
     public $deleteId;
 
     public function confirmDelete($id)
@@ -28,8 +30,18 @@ class SupplierIndex extends Component
 
     public function render()
     {
+        $query = Supplier::query()
+            ->when($this->search, function ($q) {
+                $q->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->latest();
+
+        $suppliers = $this->perPage === 'all'
+            ? $query->get()
+            : $query->paginate($this->perPage);
+
         return view('livewire.supplier.supplier-index', [
-            'suppliers' => Supplier::latest()->paginate(10)
+            'suppliers' => $suppliers
         ]);
     }
 }

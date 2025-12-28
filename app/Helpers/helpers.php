@@ -79,3 +79,20 @@ if (!function_exists('money')) {
         return number_format((float)$amount, $decimals);
     }
 }
+
+if (!function_exists('currency')) {
+    function currency($amount = null)
+    {
+        static $symbol;
+
+        if (!$symbol) {
+            $symbol = Setting::value('currency_symbol') ?? '৳';
+        }
+
+        if ($amount === null) {
+            return $symbol;
+        }
+
+        return $symbol . ' ' . number_format($amount, 2);
+    }
+}

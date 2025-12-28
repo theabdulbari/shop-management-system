@@ -28,12 +28,21 @@ class SaleCreate extends Component
 
     public $products = [];
 
+    public $search = [];
+    public $showDropdown = [];
+
+    protected $listeners = ['closeAllProductDropdowns'];
+
     public function mount()
     {
         $this->date = date('Y-m-d');
         $this->addProductRow();
         $this->generateInvoiceNumber();
     }
+    public function closeAllProductDropdowns()
+{
+    $this->showDropdown = [];
+}
 public function loadProductPrice($index)
 {
     $productId = $this->products[$index]['product_id'];
@@ -80,11 +89,30 @@ public function loadProductPrice($index)
     {
         $this->products[] = [
             'product_id' => '',
+            'product_name' => '',
             'qty' => 1,
             'unit_price' => 0,
             'subtotal' => 0
         ];
+        // $this->dispatch('reload-select2', index: count($this->products) - 1);
+        $index = array_key_last($this->products);
+        $this->search[$index] = '';
+        $this->showDropdown[$index] = false;
     }
+public function selectProduct($index, $productId)
+{
+    $product = Product::find($productId);
+    if (!$product) return;
+
+    $this->products[$index]['product_id']   = $product->id;
+    $this->products[$index]['product_name'] = $product->name;
+    $this->products[$index]['unit_price']   = $product->sell_price ?? 0;
+
+    $this->search[$index] = $product->name;
+    $this->showDropdown[$index] = false;
+
+    $this->calculateTotals();
+}
 
     public function removeProductRow($index)
     {

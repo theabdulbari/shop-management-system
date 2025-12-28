@@ -17,11 +17,13 @@ class Settings extends Component
     public $logo;
     public $db_backup_path;
     public $setting;
+    public $currency_symbol;
     public $backupRunning = false;
 
     protected $rules = [
         'system_name' => 'required|string|max:255',
         'logo' => 'nullable|image|mimes:png|max:2048',
+        'currency_symbol' => 'required|string|max:1',
         // 'db_backup_path' => 'required|string',
     ];
 
@@ -31,6 +33,7 @@ class Settings extends Component
 
         $this->system_name = $this->setting->system_name;
         $this->db_backup_path = $this->setting->db_backup_path;
+        $this->currency_symbol = $this->setting->currency_symbol;
     }
 
 public function save()
@@ -56,6 +59,7 @@ public function save()
 
     $this->setting->update([
         'system_name' => $this->system_name,
+        'currency_symbol' => $this->currency_symbol,
         // 'db_backup_path' => $this->db_backup_path,
     ]);
 

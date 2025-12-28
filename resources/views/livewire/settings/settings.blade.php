@@ -22,6 +22,15 @@
             <label>System Logo</label>
             <input type="file" class="form-control" wire:model="logo">
         </div>
+        <div class="mb-3">
+            <label class="form-label">Currency Symbol</label>
+            <input type="text"
+                name="currency_symbol"
+                 wire:model.defer="currency_symbol"
+                class="form-control"
+                placeholder="৳, $, €, £"
+                maxlength="5">
+        </div>
 
         {{-- <div class="mb-3">
             <label>Database Backup Path *</label>

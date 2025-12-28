@@ -38,6 +38,7 @@
         @endforeach
         </tbody>
     </table>
-
-    {{ $products->links() }}
+    <div class="card-footer d-flex justify-content-center">
+            {{ $products->links('pagination::bootstrap-5') }}
+    </div>
 </div>
