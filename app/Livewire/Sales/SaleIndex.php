@@ -38,6 +38,15 @@ class SaleIndex extends Component
         }
     }
 
+    public function updatedPerPage($value)
+{
+    if ($value !== 'all') {
+        $this->perPage = (int) $value;
+    }
+
+    $this->resetPage();
+}
+
     public function resetFilters()
     {
         $this->reset([
@@ -129,9 +138,11 @@ class SaleIndex extends Component
 
         ->latest();
 
-    $sales = $this->perPage === 'all'
-        ? $query->get()
-        : $query->paginate($this->perPage);
+        if ($this->perPage === 'all') {
+            $sales = $query->get();
+        } else {
+            $sales = $query->paginate((int) $this->perPage);
+        }
         
         return view('livewire.sales.sale-index', [
             'sales' => $sales

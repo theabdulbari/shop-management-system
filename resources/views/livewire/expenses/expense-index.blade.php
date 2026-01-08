@@ -54,6 +54,10 @@
                                 </a>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="6"><b>Note:</b> {{ $expense->note }}</td>
+                            <td colspan="2"><b>Ref:</b> {{ $expense->reference }}</td>
+                        </tr>
                     @empty
                         <tr>
                             <td colspan="8" class="text-center py-3">

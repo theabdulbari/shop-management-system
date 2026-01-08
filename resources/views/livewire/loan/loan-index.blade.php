@@ -43,8 +43,11 @@
         <tbody>
         @foreach($loans as $loan)
             <tr>
-                <td>{{ $loan->payer_name }}</td>
-                <td>{{ $loan->loan_date->format('d-m-Y') }}</td>
+                <td>
+                    <div>{{ $loan->payer_name }}</div>
+                    <small style="font-size:11px;"><a href="tel:{{ $loan->phone }}">{{ $loan->phone }}</a></small>
+                </td>
+                <td>{{ $loan->loan_date->format('d-M-Y') }}</td>
                 <td>{{ number_format($loan->amount, 2) }}</td>
                 <td>{{ number_format($loan->paid, 2) }}</td>
                 <td>{{ number_format($loan->due, 2) }}</td>
@@ -83,7 +86,12 @@
                         Delete
                     </button>
                     
-                </td>
+                </td> 
+            </tr>
+            <tr>
+                <td colspan="4"><b>Note:</b> {{ $loan->note }}</td>
+                <td><b>P.P.Date:</b> {{ $loan->possible_paid_date->format('d M Y') }}</td>
+                <td colspan="2"><b>Address:</b> {{ $loan->address }}</td>
             </tr>
         @endforeach
         </tbody>

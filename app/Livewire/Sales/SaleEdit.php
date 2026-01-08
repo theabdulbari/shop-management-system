@@ -23,9 +23,11 @@ class SaleEdit extends Component
     public $due = 0;
     public $payment_status = 'due';
     public $invoice_number;
-
+    public $search = [];
+    public $showDropdown = [];
     public $products = [];
 
+    protected $listeners = ['closeAllProductDropdowns'];
     /** -------------------------
      *  MOUNT
      * ------------------------*/
@@ -43,19 +45,26 @@ class SaleEdit extends Component
         $this->payment_status = $sale->payment_status;
         $this->invoice_number = $sale->invoice?->invoice_number;
 
-        foreach ($sale->items as $item) {
+        foreach ($sale->items as $index => $item) {
+            $product = Product::find($item->product_id);
             $this->products[] = [
                 'product_id' => $item->product_id,
                 'qty'        => $item->qty,
                 'unit_price' => $item->unit_price,
                 'subtotal'   => $item->subtotal,
             ];
+
+            $this->search[$index] = $product?->name ?? '';
+            $this->showDropdown[$index] = false;
         }
 
         $this->calculateTotals();
     }
 
-
+public function closeAllProductDropdowns()
+    {
+        $this->showDropdown = [];
+    }
     /** -------------------------
      *  PRODUCT PRICE
      * ------------------------*/
@@ -87,6 +96,20 @@ class SaleEdit extends Component
         ];
     }
 
+    public function selectProduct($index, $productId)
+{
+    $product = Product::find($productId);
+    if (!$product) return;
+
+    $this->products[$index]['product_id']   = $product->id;
+    $this->products[$index]['product_name'] = $product->name;
+    $this->products[$index]['unit_price']   = $product->sell_price ?? 0;
+
+    $this->search[$index] = $product->name;
+    $this->showDropdown[$index] = false;
+
+    $this->calculateTotals();
+}
     public function removeProductRow($index)
     {
         unset($this->products[$index]);

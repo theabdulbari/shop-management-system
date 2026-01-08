@@ -44,7 +44,7 @@
             {{-- Per Page --}}
             <div class="col-md-2">
                 <label class="form-label">Per Page</label>
-                <select class="form-select" wire:model="perPage">
+                <select class="form-select" wire:model.lazy="perPage">
                     <option value="10">10</option>
                     <option value="25">25</option>
                     <option value="50">50</option>

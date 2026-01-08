@@ -40,14 +40,63 @@
             <tbody>
                 @foreach($products as $index => $p)
                     <tr>
-                        <td>
+                        {{-- <td>
                             <select wire:model="products.{{ $index }}.product_id" wire:change="loadProductPrice({{ $index }})" class="form-select">
                                 <option value="">Select Product</option>
                                 @foreach($allProducts as $prod)
                                     <option value="{{ $prod->id }}">{{ $prod->name }} (Stock: {{ $prod->stock_qty }})</option>
                                 @endforeach
                             </select>
-                        </td>
+                        </td> --}}
+
+
+                        <td wire:key="product-search-{{ $index }}" class="product-search-wrapper" onclick="event.stopPropagation()"  style="position: relative">
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Search product..."
+                                wire:model.live.debounce.300ms="search.{{ $index }}"
+                                wire:focus="$set('showDropdown.{{ $index }}', true)"
+                            >
+
+                            @if($showDropdown[$index] ?? false)
+                                <ul
+                                    wire:ignore.self
+                                    class="list-group position-absolute w-100 shadow"
+                                    style="z-index:999; max-height:220px; overflow-y:auto;"
+                                >
+                                    @php
+                                        $filtered = $allProducts->filter(fn ($p) =>
+                                            empty($search[$index]) ||
+                                            str_contains(
+                                                strtolower($p->name),
+                                                strtolower($search[$index])
+                                            )
+                                        );
+                                    @endphp
+
+                                    @forelse($filtered as $prod)
+                                        <li
+                                            class="list-group-item list-group-item-action"
+                                            style="cursor:pointer"
+                                            wire:mousedown.prevent="selectProduct({{ $index }}, {{ $prod->id }})"
+                                        >
+                                            {{ $prod->name }}
+                                            <small class="text-muted">
+                                                (Stock: {{ $prod->stock_qty }})
+                                            </small>
+                                        </li>
+                                    @empty
+                                        <li class="list-group-item text-muted">
+                                            No product found
+                                        </li>
+                                    @endforelse
+                                </ul>
+                            @endif
+                        </td>    
+
+
+
                         <td><input type="number" wire:model.lazy="products.{{ $index }}.qty" step="0.001" min="0" class="form-control"></td>
                         <td><input type="number" wire:model.lazy="products.{{ $index }}.unit_price" step="0.001" min="0" class="form-control"></td>
                         <td>{{ $p['subtotal'] ?? 0 }}</td>
@@ -117,3 +166,9 @@
 
 
 {{-- <td><input type="number" wire:model="products.{{ $index }}.tax" class="form-control"></td> --}}
+
+<script>
+document.addEventListener('click', function () {
+    Livewire.dispatch('closeAllProductDropdowns');
+});
+</script>
