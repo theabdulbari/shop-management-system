@@ -90,7 +90,7 @@
             </tr>
             <tr>
                 <td colspan="4"><b>Note:</b> {{ $loan->note }}</td>
-                <td><b>P.P.Date:</b> {{ $loan->possible_paid_date->format('d M Y') }}</td>
+                <td><b>P.P.Date:</b> {{ $loan->possible_paid_date->format('d-M-Y') }}</td>
                 <td colspan="2"><b>Address:</b> {{ $loan->address }}</td>
             </tr>
         @endforeach
